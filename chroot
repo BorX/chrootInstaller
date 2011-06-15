@@ -1,0 +1,27 @@
+#!/bin/bash
+[ -z "$1" ] && exit 1
+
+[ -d "$1" ] && CHROOT_PATH="$1" || {
+  CHROOT_PATH="$(mktemp -d)"
+  mount $1 "$CHROOT_PATH"
+}
+mount --bind {,"$CHROOT_PATH"}/dev
+
+cat > "$CHROOT_PATH"/opt/chrootin <<EOF
+#!/bin/bash 
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devpts devpts /dev/pts
+/bin/bash
+umount /dev/pts /sys /proc
+EOF
+chmod 700 "$CHROOT_PATH"/opt/chrootin
+
+chroot "$CHROOT_PATH" /opt/chrootin
+rm "$CHROOT_PATH"/opt/chrootin
+
+umount "$CHROOT_PATH"/dev
+[ ! -d "$1" ] && {
+  umount "$CHROOT_PATH"
+  rmdir "$CHROOT_PATH"
+}
