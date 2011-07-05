@@ -71,8 +71,7 @@ showTitle2 'Configuration'
 [ -n "$TARGET_PARTITION" ] && showMessage "TARGET_PARTITION=$TARGET_PARTITION" || showMessage "TARGET_PATH=$TARGET_PATH"
 showMessage "SUITE=$SUITE
 TARGET_NAME=$TARGET_NAME
-MIRROR=$MIRROR
-MODIFY_DHCP_CONF=$MODIFY_DHCP_CONF"
+MIRROR=$MIRROR"
 
 # Checking parameters
 [[ (-z "$TARGET_PARTITION" && -z "$TARGET_PATH") || -z "$SUITE" || -z "$TARGET_NAME" || -z "$MIRROR" ]] && showErrorAndExit $EXIT_CODE_INVALID_PARAMETER 'Invalid parameter(s)'
